@@ -1,1 +1,1 @@
-# Sentiment-Analysis-of-COVID-19-with-FastText
+# Sentiment-Analysis-of-COVID-19-Misinformation-with-FastText
