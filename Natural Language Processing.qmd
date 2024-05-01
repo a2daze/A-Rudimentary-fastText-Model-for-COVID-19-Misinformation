@@ -1,0 +1,38 @@
+---
+author: "Alex Zharchuk"
+title: "Natural Language Processing"
+format: 
+  html:
+    code-fold: true
+    self-contained: true
+editor: visual
+jupyter: python3
+keep-ipynb: true
+---
+
+
+```{r}
+library(tidyverse)
+similarities<-read.csv('/Users/alexz/similarity_df.csv')
+head(similarities)
+```
+
+```{r}
+ggplot(data=similarities, aes(word1,word2,fill=similarity))+
+  geom_tile()+
+  scale_fill_gradient(low='white',high='blue')+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=45,hjust=1))+
+  labs(title='Word Similarities')+
+  xlab('Word 1')+ylab('Word 2')+ggtitle('Word Similarities') 
+```
+
+```{r}
+
+```
+
+```{r}
+
+ggplot(data=similarities, aes(word1,word2)
+
+```
