@@ -1,0 +1,22 @@
+---
+author: "Alex Zharchuk"
+title: "Sentiment Analysis of COVID-19 Misinformation with FastText - Processing Data and Visualizing in R"
+output: github_document
+---
+
+```{r}
+rmarkdown::find_pandoc()
+library(tidyverse)
+similarities<-read.csv('/Users/alexz/Sentiment Analysis of COVID-19 Misinformation with FastText/similarity_df.csv')
+head(similarities)
+```
+
+```{r}
+ggplot(data=similarities, aes(word1,word2,fill=similarity))+
+  geom_tile()+
+  scale_fill_gradient(low='white',high='blue')+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=45,hjust=1))+
+  labs(title='Word Similarities')+
+  xlab('Word 1')+ylab('Word 2')+ggtitle('Word Similarities') 
+```
