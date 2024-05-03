@@ -5,11 +5,49 @@ output: github_document
 ---
 
 ```{r}
-rmarkdown::find_pandoc()
 library(tidyverse)
-similarities<-read.csv('/Users/alexz/Sentiment Analysis of COVID-19 Misinformation with FastText/similarity_df.csv')
-head(similarities)
+library(rvest)
+
+#Read in UNESCO data
+disinformation <- read.csv('disinfo_stories_copy.csv')
+
+#Remove rows with missing data
+disinformation<-na.omit(disinformation)
+
+#Filter misinformation instances that are related to false cures and preventative measures
+sites_filtered<-disinformation%>%group_by(Recoded_Main_Narrative)%>%
+  filter("False cures and preventative measures" %in% Recoded_Main_Narrative)
+
+#Extract the URLs of the sites (full list)
+sites<-disinformation$Reported_On
+
+#Extract the URLs of the sites (filtered list)
+sites_filtered<-sites_filtered$Reported_On
 ```
+
+```{r}
+
+#Loop through every URL in the filtered list, extract text from paragraph nodes and write to a file
+#TryCatch block is used to handle errors so that the script can keep running if
+#There is a connection error
+
+for (i in 1:length(sites_filtered)) {
+  tryCatch({
+    page <- read_html(sites_filtered[i])
+    text <- page %>%
+      html_nodes('p') %>%
+      html_text()
+      print(paste("Processing site", i, "with text length", length(text)))
+
+  }, error = function(e) {
+    message("Error with site: ", sites_filtered[i], " - Skipping to next site.")
+      write_lines(text, "full_text_disinfo_cures",append=TRUE)
+  })
+}
+```
+
+
+
 
 ```{r}
 ggplot(data=similarities, aes(word1,word2,fill=similarity))+
@@ -20,3 +58,10 @@ ggplot(data=similarities, aes(word1,word2,fill=similarity))+
   labs(title='Word Similarities')+
   xlab('Word 1')+ylab('Word 2')+ggtitle('Word Similarities') 
 ```
+
+```{r}
+library(rvest)
+
+urls <-
+```
+
