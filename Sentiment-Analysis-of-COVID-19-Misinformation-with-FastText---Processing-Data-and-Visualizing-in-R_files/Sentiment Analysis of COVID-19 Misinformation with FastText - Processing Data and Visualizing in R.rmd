@@ -15,14 +15,17 @@ disinformation <- read.csv('disinfo_stories_copy.csv')
 disinformation<-na.omit(disinformation)
 
 #Filter misinformation instances that are related to false cures and preventative measures
-sites_filtered<-disinformation%>%group_by(Recoded_Main_Narrative)%>%
-  filter("False cures and preventative measures" %in% Recoded_Main_Narrative)
+sites_filtered<-disinformation%>%filter(Primary_Language == 'English')
+write.csv(sites_filtered, 'filtered_disinfo_full_withoutnarrative.csv')
 
 #Extract the URLs of the sites (full list)
 sites<-disinformation$Reported_On
 
 #Extract the URLs of the sites (filtered list)
-sites_filtered<-sites_filtered$Reported_On
+#sites_filtered<-sites_filtered$Reported_On
+```
+
+```{r}
 ```
 
 ```{r}
@@ -41,9 +44,11 @@ for (i in 1:length(sites_filtered)) {
 
   }, error = function(e) {
     message("Error with site: ", sites_filtered[i], " - Skipping to next site.")
-      write_lines(text, "full_text_disinfo_cures",append=TRUE)
+      write_lines(text, "full_text_disinfo",append=TRUE)
   })
+  
 }
+
 ```
 
 
@@ -60,8 +65,29 @@ ggplot(data=similarities, aes(word1,word2,fill=similarity))+
 ```
 
 ```{r}
+library(tidyverse)
 library(rvest)
 
-urls <-
+select_test_urls<-test_sites$URL
+select_test_urls
+#Loop through every URL in the filtered list, extract text from paragraph nodes and write to a file
+#TryCatch block is used to handle errors so that the script can keep running if
+#There is a connection error
+
+for (i in 1:length(select_test_urls)) {
+  tryCatch({
+    page <- read_html(select_test_urls[i])
+    text <- page %>%
+      html_nodes('p') %>%
+      html_text()
+      print(paste("Processing site", i, "with text length", length(text)))
+      write_lines(text, "full_text_testsites_official",append=TRUE)
+  }, error = function(e) {
+    message("Error with site: ", select_test_urls[i], " - Skipping to next site.")
+  })
+}
+
+write_csv(test_sites, 'test_sites.csv')
+
 ```
 
