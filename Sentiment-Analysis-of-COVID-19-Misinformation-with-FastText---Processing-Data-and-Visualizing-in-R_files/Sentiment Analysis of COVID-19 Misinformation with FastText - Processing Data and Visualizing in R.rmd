@@ -8,24 +8,9 @@ output: github_document
 library(tidyverse)
 library(rvest)
 
-#Read in UNESCO data
-disinformation <- read.csv('disinfo_stories_copy.csv')
+#Read in data
+disinformation <- read.csv('filtered_disinfo.csv')
 
-#Remove rows with missing data
-disinformation<-na.omit(disinformation)
-
-#Filter misinformation instances that are related to false cures and preventative measures
-sites_filtered<-disinformation%>%filter(Primary_Language == 'English')
-write.csv(sites_filtered, 'filtered_disinfo_full_withoutnarrative.csv')
-
-#Extract the URLs of the sites (full list)
-sites<-disinformation$Reported_On
-
-#Extract the URLs of the sites (filtered list)
-#sites_filtered<-sites_filtered$Reported_On
-```
-
-```{r}
 ```
 
 ```{r}
@@ -33,22 +18,35 @@ sites<-disinformation$Reported_On
 #Loop through every URL in the filtered list, extract text from paragraph nodes and write to a file
 #TryCatch block is used to handle errors so that the script can keep running if
 #There is a connection error
-
-for (i in 1:length(sites_filtered)) {
+process_url <- function(url, label) {
+  output_line <- paste(url, "Error fetching data", label, sep = ",")  # Default output assumes an error
   tryCatch({
-    page <- read_html(sites_filtered[i])
+    page <- read_html(url)
     text <- page %>%
       html_nodes('p') %>%
-      html_text()
-      print(paste("Processing site", i, "with text length", length(text)))
+      html_text() %>%
+      paste(collapse = " ")  # Collapse all paragraphs into one string
 
+    output_line <- paste(url, text, label, sep = ",")
+    print(paste("Processed:", url))
   }, error = function(e) {
-    message("Error with site: ", sites_filtered[i], " - Skipping to next site.")
-      write_lines(text, "full_text_disinfo",append=TRUE)
+    message("Error with site:", url, "- Error details:", e$message)
   })
-  
+  return(output_line)  # Return the output line whether it's the extracted text or the default error message
 }
 
+# Assuming you have a data frame 'disinformation' with columns 'urls' and 'labels'
+results <- vector("character", nrow(disinformation))
+for (i in seq_along(disinformation$Reported_On)) {
+  results[i] <- process_url(disinformation$Reported_On[i], disinformation$Labels[i])
+}
+write_lines(results, "disinfo_train_labeled", append = TRUE)
+
+
+# Loop through each row in your data frame
+for (i in 1:nrow(disinformation)) {
+  process_url(disinformation$Reported_On[i], disinformation$Label[i])
+}
 ```
 
 
