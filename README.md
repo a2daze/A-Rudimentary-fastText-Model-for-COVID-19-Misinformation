@@ -1,1 +1,1 @@
-# Sentiment-Analysis-of-COVID-19-Misinformation-with-FastText
+# A-Rudimentary-fastText-Model-for-COVID-19-Misinformation
