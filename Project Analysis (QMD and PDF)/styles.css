@@ -1,0 +1,42 @@
+
+
+.mermaid {
+    width: 30%;
+    margin: 0 auto;
+  }
+  
+
+.title {
+    font-size: 23px;
+    font-weight: lighter;
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: inherit
+}
+
+.indent {
+    text-indent: 30px; 
+}
+
+.indentlarge {
+    text-indent: 50px;
+}
+
+/* Box shadow for headers */
+h1, h2, h3 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+body {
+    margin: 0.01in;
+  }
+
+  main {
+    max-width: 800px; /* Adjust the max-width as needed */
+    margin: 0 auto;
+    padding-left: 0 100px;
+    padding-right: 0 100px;
+    padding-top: 0 20px;
+  }
+  
