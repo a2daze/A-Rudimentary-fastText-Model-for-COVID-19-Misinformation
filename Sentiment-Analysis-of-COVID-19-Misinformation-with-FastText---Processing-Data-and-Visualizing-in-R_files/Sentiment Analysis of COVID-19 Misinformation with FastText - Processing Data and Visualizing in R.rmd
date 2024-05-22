@@ -9,8 +9,50 @@ library(tidyverse)
 library(rvest)
 
 #Read in data
-disinformation <- read.csv('filtered_disinfo.csv')
+disinformation <- read.csv('/Users/alexz/Programming/Python Projects/Sentiment Analysis of COVID-19 Misinformation with FastText/Sentiment-Analysis-of-COVID-19-Misinformation-with-FastText/disinfo_stories.csv')
 
+```
+
+```{r}
+#Count number of URLs in the data 
+nrow(disinformation)
+```
+
+```{r}
+```
+
+```{r}
+
+#print total number of characters in the file
+count_characters <- function(file_path) {
+  text <- readLines(file_path)
+  text <- paste(text, collapse = " ")
+  return(nchar(text))
+}
+
+#print total number of word in the file
+count_words <- function(file_path) {
+  text <- readLines(file_path)
+  text <- paste(text, collapse = " ")
+  return(length(unlist(strsplit(text, "\\s+"))))
+}
+
+count_words("/Users/alexz/Programming/Python Projects/Sentiment Analysis of COVID-19 Misinformation with FastText/Sentiment-Analysis-of-COVID-19-Misinformation-with-FastText/full_text_disinfo_cleaned.txt")
+```
+
+```{r}
+count_characters("/Users/alexz/Programming/Python Projects/Sentiment Analysis of COVID-19 Misinformation with FastText/Sentiment-Analysis-of-COVID-19-Misinformation-with-FastText/full_text_disinfo_cleaned.txt")
+```
+
+```{r}
+
+
+```
+
+```{r}
+```
+
+```{r}
 ```
 
 ```{r}
